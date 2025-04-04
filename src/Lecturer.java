@@ -1,16 +1,15 @@
+
 // Lecturer.java
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lecturer extends Person {
+public class Lecturer extends AcademicMember {
     private String lecturerId;
-    private String department;
     private List<Course> assignedCourses;
 
     public Lecturer(String id, String name, String email, String phone, String lecturerId, String department) {
-        super(id, name, email, phone);
+        super(id, name, email, phone, department);
         this.lecturerId = lecturerId;
-        this.department = department;
         this.assignedCourses = new ArrayList<>();
     }
 
@@ -21,14 +20,6 @@ public class Lecturer extends Person {
 
     public void setLecturerId(String lecturerId) {
         this.lecturerId = lecturerId;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
     }
 
     public List<Course> getAssignedCourses() {
@@ -47,7 +38,7 @@ public class Lecturer extends Person {
 
     @Override
     public String toString() {
-        return super.toString() + ", Lecturer ID: " + lecturerId + ", Department: " + department;
+        return super.toString() + ", Lecturer ID: " + lecturerId;
     }
 
     public void printAssignedCourses() {
@@ -55,5 +46,20 @@ public class Lecturer extends Person {
         for (Course course : assignedCourses) {
             System.out.println("- " + course.getCourseName() + " (Code: " + course.getCourseCode() + ")");
         }
+    }
+
+    @Override
+    public void printSchedule() {
+        System.out.println("\nTeaching Schedule for " + getName() + ":");
+        for (Course course : assignedCourses) {
+            System.out.println("- " + course.getCourseName() + " (" + course.getCourseCode() + ")");
+        }
+    }
+
+    @Override
+    public double calculateWorkload() {
+        return assignedCourses.stream()
+                .mapToDouble(Course::getCredits)
+                .sum() * 2.5; // Assuming 2.5 hours of work per credit
     }
 }
